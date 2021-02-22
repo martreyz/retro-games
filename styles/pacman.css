@@ -1,0 +1,144 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  background-color: #fafaf2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  width: 420px;
+  height: 450px;
+}
+
+.info {
+  width: 420px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #66909c;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.One {
+  height: 15px;
+  width: 15px;
+  box-sizing: border-box;
+  background-color: #66909c;
+}
+
+.Two {
+  height: 15px;
+  width: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.normalPoint {
+  height: 4px;
+  width: 4px;
+  border-radius: 50%;
+  background-color: #a4d1bc;
+}
+
+.bigPoint {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: #a4d1bc;
+}
+
+.Three {
+  height: 15px;
+  width: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Four {
+  height: 15px;
+  width: 15px;
+}
+
+.Five {
+  height: 15px;
+  width: 15px;
+  background-color: #79a6b3;
+}
+
+.lifes {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.pacman {
+  width: 1px;
+  height: 1px;
+  border: 10px solid #f7f700;
+  border-right-color: transparent;
+  border-radius: 50%;
+}
+
+.gamePacman {
+  width: 1px;
+  height: 1px;
+  border: 6px solid #f7f700;
+  border-right-color: transparent;
+  border-radius: 50%;
+  margin-top: 1px;
+}
+
+@keyframes speedRun {
+  0% {
+    width: 1px;
+    height: 1px;
+    border: 6px solid #f7f700;
+    border-right-color: transparent;
+    border-radius: 50%;
+    margin-top: 1px;
+  }
+  25% {
+    width: 1px;
+    height: 1px;
+    border: 6px solid #f700ce;
+    border-right-color: transparent;
+    border-radius: 50%;
+    margin-top: 1px;
+  }
+  50% {
+    width: 1px;
+    height: 1px;
+    border: 6px solid #f7f700;
+    border-right-color: transparent;
+    border-radius: 50%;
+    margin-top: 1px;
+  }
+  100% {
+    width: 1px;
+    height: 1px;
+    border: 6px solid #f700ce;
+    border-right-color: transparent;
+    border-radius: 50%;
+    margin-top: 1px;
+  }
+}
+
+.speedRun {
+  animation: speedRun 1s ease;
+  animation-iteration-count: 30;
+}
