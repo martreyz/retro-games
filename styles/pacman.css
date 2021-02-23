@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: #fafaf2;
+  background-color: #1f2527;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,7 +78,7 @@ body {
 .Five {
   height: 15px;
   width: 15px;
-  background-color: #79a6b3;
+  background-color: #1f2527;
 }
 
 .lifes {
@@ -101,6 +101,32 @@ body {
   border-right-color: transparent;
   border-radius: 50%;
   margin-top: 1px;
+  margin-left: 2px;
+  margin-bottom: 1px;
+}
+
+.ghostOne {
+  width: 1px;
+  height: 4px;
+  border: 7px solid #00f73e;
+  border-bottom-color: transparent;
+  border-radius: 40%;
+}
+
+.ghostTwo {
+  width: 1px;
+  height: 4px;
+  border: 7px solid #f700d6;
+  border-bottom-color: transparent;
+  border-radius: 40%;
+}
+
+.ghostThree {
+  width: 1px;
+  height: 4px;
+  border: 7px solid #f70000;
+  border-bottom-color: transparent;
+  border-radius: 40%;
 }
 
 @keyframes speedRun {
