@@ -30,11 +30,12 @@ body {
 }
 
 .game {
-  width: 420px;
   display: flex;
   flex-direction: column;
   margin: 20px;
   position: relative;
+  border: #f7f700 10px double;
+  padding: 30px;
 }
 
 .board {

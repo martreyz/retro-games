@@ -1,11 +1,68 @@
 "use strict";
 
+//DECLARE ALL HTML ELEMENTS NEEDED FOR THE FUNCTIONALITIES:
+
+//For starting the game:
 const startBtn = document.querySelector(".start");
+const board = document.querySelector(".board");
+const scoreContainer = document.querySelector(".score");
+const levelContainer = document.querySelector(".level");
+
+//For the ongame functionalities:
+
+const lifesContainer = document.querySelector(".lifes");
+
+//For the "Game over" functionality:
+const gameOverContainer = document.querySelector(".gameOver");
+const finalScore = document.querySelector(".finalScore");
+const timerContainer = document.querySelector(".timer");
+const finalTime = document.querySelector(".time");
+const gameOverText = document.querySelector(".gameOver_text");
+const gameOverBtn = document.querySelector(".gameOver_button");
+
+//For winning functionality:
+const congratulationsContainer = document.querySelector(".congratulations");
+const congratulationsFinalScore = document.querySelector(
+  ".congratulationsFinalScore"
+);
+const congratulationsFinalTime = document.querySelector(".congratulationsTime");
+const congratulationsBtn = document.querySelector(".congratulations_button");
+
+//DECLARE ALL NEEDED VARIABLES AND CONSTANTS TO RUN THE GAME:
+
+//Declaration of the array where to save al json info about the board styles config:
+//Styles legend:
+//One- Wall
+//Two- point
+//Three- bigPoint
+//Four- void transitable
+//Five- void nontransitable
 
 let boardStyles = [];
 
+//Declaration of the array where to save all the created squares HTML elements:
+
+let squares = [];
+
+//Declaration of total points variables for the winning functionality:
+
 let pointsToWin = 236;
 let bigPointsToWin = 4;
+
+//Declaration of variables for ongame information:
+
+let score = 0;
+let level = 1;
+let lifes = 3;
+
+//Declaration of timer initial variables:
+
+let timerInterval;
+let seconds = 0;
+let minutes = 0;
+
+//Fetch the json information and save it to our boardStyles variable array created before:
+
 fetch("../data/board.json")
   .then((response) => {
     return response.json();
@@ -16,54 +73,26 @@ fetch("../data/board.json")
     }
     completeBoard();
   });
-const board = document.querySelector(".board");
 
-//Start:
+//STARTING THE GAME:
 
+//Event listener and function for the "Start" button:
 const startTheGame = () => {
   startBtn.classList.add("congratulations_hidden");
   startPoints = [403, 404, 405, 406, 407, 408];
   renderLifes();
   startPoint();
   ghostPlacement();
-  const timerInterval = setInterval(timer, 1000);
+  timerInterval = setInterval(timer, 1000);
 };
 
 startBtn.addEventListener("click", startTheGame);
 
-//1- Wall
-//2- point
-//3- bigPoint
-//4- void transitable
-//5- void nontransitable
-
-let squares = [];
-let score = 0;
-let level = 1;
-let lifes = 3;
-
-const scoreContainer = document.querySelector(".score");
+//Render initial score and level information:
 scoreContainer.innerHTML = score;
-const levelContainer = document.querySelector(".level");
 levelContainer.innerHTML = level;
-const gameOverContainer = document.querySelector(".gameOver");
-const finalScore = document.querySelector(".finalScore");
-const timerContainer = document.querySelector(".timer");
-const finalTime = document.querySelector(".time");
-const gameOverText = document.querySelector(".gameOver_text");
-const gameOverBtn = document.querySelector(".gameOver_button");
-
-const congratulationsContainer = document.querySelector(".congratulations");
-const congratulationsFinalScore = document.querySelector(
-  ".congratulationsFinalScore"
-);
-const congratulationsFinalTime = document.querySelector(".congratulationsTime");
-const congratulationsBtn = document.querySelector(".congratulations_button");
 
 //Render and function of timer:
-let seconds = 50;
-let minutes = 9;
-
 const timer = () => {
   seconds++;
   if (seconds === 60) {
@@ -88,8 +117,6 @@ const timer = () => {
 
 //Render lifes:
 
-const lifesContainer = document.querySelector(".lifes");
-
 const renderLifes = () => {
   lifesContainer.innerHTML = "";
   for (let i = 0; i < lifes; i++) {
@@ -98,6 +125,8 @@ const renderLifes = () => {
     lifesContainer.appendChild(life);
   }
 };
+
+//Renders initial board and its configuration:
 
 const completeBoard = () => {
   for (let i = 0; i < boardStyles.length; i++) {
@@ -123,30 +152,24 @@ const completeBoard = () => {
   }
 };
 
-//Replay:
+//FUNCTIONALITIES FOR THE PACMAN MOVEMENT:
 
-const reload = () => {
-  location.reload();
-};
-
-gameOverBtn.addEventListener("click", reload);
-congratulationsBtn.addEventListener("click", reload);
-
-//Pacman movement:
-
-// Starting position of pacman:
+//Declares starting position of pacman and creates "pacman"'s HTML element:
 let pacmanStart = 490;
 const pacman = document.createElement("div");
 
-//Start placement pacman:
+//Places pacman on its start square defined before (no.490):
 const startPoint = () => {
   pacman.classList.add("gamePacman");
   squares[pacmanStart].appendChild(pacman);
 };
 
-//Movement and feed pacman:
+//Movement and feed pacman cases:
 const pacmanMoving = (ev) => {
+  //Take away pacman from the square where it currently is:
   squares[pacmanStart].removeChild(pacman);
+
+  //Depending on the key pressed and after checking all conditions specified bellow, sends instructions or where pacman should go next:
   switch (ev.keyCode) {
     case 37:
       if (
@@ -295,29 +318,23 @@ const pacmanMoving = (ev) => {
       }
       break;
   }
-
-  if (pointsToWin === 0 && bigPointsToWin === 0) {
-    congratulationsFinalScore.innerHTML = score;
-    if (seconds < 10) {
-      congratulationsFinalTime.innerHTML = "0" + minutes + ":0" + seconds;
-    } else {
-      congratulationsFinalTime.innerHTML = "0" + minutes + ":" + seconds;
-    }
-    congratulationsContainer.classList.remove("congratulations_hidden");
-    clearInterval(gameMoving);
-    clearInterval(timerInterval);
-  }
+  //After calculating the new index of the squares array where the pacman should go, we append pacman there:
   squares[pacmanStart].appendChild(pacman);
+
+  //Run the functions to check if the player levels up or wins the game:
+  checkVictory();
   checkLevel();
 };
+
+document.addEventListener("keyup", pacmanMoving);
+
+//Function in charge of removing the "speedUp" class passed the stablished time:
 
 const removeClass = () => {
   pacman.classList.remove("speedRun");
 };
 
-document.addEventListener("keyup", pacmanMoving);
-
-//Level up:
+//Function to level up on regards to how many points did the player obtain:
 
 const checkLevel = () => {
   if (score < 50) {
@@ -371,7 +388,31 @@ const checkLevel = () => {
   }
 };
 
-//Ghosts:
+//Conditional bellow checks on each movement if pacman has eaten all big and normal board points and, in case it has, finish the game:
+
+const checkVictory = () => {
+  if (pointsToWin === 0 && bigPointsToWin === 0) {
+    congratulationsFinalScore.innerHTML = score;
+    const finalMinutes = minutes;
+    const finalSeconds = seconds;
+    if (seconds < 10) {
+      congratulationsFinalTime.innerHTML =
+        "0" + finalMinutes + ":0" + finalSeconds;
+      timerContainer.innerHTML = "0" + finalMinutes + ":0" + finalSeconds;
+    } else {
+      congratulationsFinalTime.innerHTML =
+        "0" + finalMinutes + ":" + finalSeconds;
+      timerContainer.innerHTML = "0" + finalMinutes + ":" + finalSeconds;
+    }
+    congratulationsContainer.classList.remove("congratulations_hidden");
+    clearInterval(gameMoving);
+    clearInterval(timerInterval);
+  }
+};
+
+//FUNCTIONALITIES FOR THE GHOSTS CREATION AND MOVEMENT:
+
+//Declare array and create all our ghosts inside:
 
 let ghosts = [
   document.createElement("div"),
@@ -382,7 +423,12 @@ let ghosts = [
   document.createElement("div"),
 ];
 
+//Declare array with all the starting points corresponding to each of the ghosts:
+
 let startPoints = [403, 404, 405, 406, 407, 408];
+
+//Declare array with all the classes corresponding to each of the ghosts for them to be different from each other:
+
 let classes = [
   "ghostOne",
   "ghostTwo",
@@ -401,9 +447,12 @@ const ghostPlacement = () => {
   }
 };
 
+//Declares a initial previousDirections array for the ghosts to have a reference for their first movement:
+
 let previousDirection = [-28, -28, -28, -28, -28, -28];
-let preferredDirection = [1, -1, 28, -28, 1, -1];
-//Ghosts movement:
+
+//Ghosts random movement based on some specified conditions for them to travel correctly along all board:
+
 const ghostMovement = () => {
   let directions = [1, -1, 28, -28];
   for (let i = 0; i < ghosts.length; i++) {
@@ -553,6 +602,23 @@ const ghostMovement = () => {
     }
   }
 
+  //Run functions to replace ghosts and check if pacman dead on this movement:
+
+  checkDeath();
+  ghostPlacement();
+};
+
+//Declare variable for the ghosts speed to increment as the user get better in the board:
+
+let ms = 200 - level * 70;
+
+//Declare an interval to make the continuous movement of the ghosts;
+
+const gameMoving = setInterval(ghostMovement, ms);
+
+//Checks if pacman dead on the last movement:
+
+const checkDeath = () => {
   if (
     startPoints.indexOf(pacmanStart) !== -1 ||
     startPoints.indexOf(pacmanStart + 1) !== -1 ||
@@ -581,10 +647,13 @@ const ghostMovement = () => {
       clearInterval(timerInterval);
     }
   }
-
-  ghostPlacement();
 };
 
-let ms = 200 - level * 80;
+//Manages the "play again" button in game over and congratulations pop ups:
 
-const gameMoving = setInterval(ghostMovement, ms);
+const reload = () => {
+  location.reload();
+};
+
+gameOverBtn.addEventListener("click", reload);
+congratulationsBtn.addEventListener("click", reload);
