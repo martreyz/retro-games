@@ -22,11 +22,57 @@ const board = document.querySelector(".board");
 let squares = [];
 let score = 0;
 let level = 1;
+let lifes = 3;
 
 const scoreContainer = document.querySelector(".score");
 scoreContainer.innerHTML = score;
 const levelContainer = document.querySelector(".level");
 levelContainer.innerHTML = level;
+const gameOverContainer = document.querySelector(".gameOver");
+const finalScore = document.querySelector(".finalScore");
+const timerContainer = document.querySelector(".timer");
+const finalTime = document.querySelector(".time");
+const gameOverText = document.querySelector(".gameOver_text");
+
+//Render and function of timer:
+let seconds = 50;
+let minutes = 9;
+
+const timer = () => {
+  seconds++;
+  if (seconds === 60) {
+    seconds = 0;
+    minutes++;
+  }
+  if (seconds < 10) {
+    timerContainer.innerHTML = "0" + minutes + ":0" + seconds;
+  } else {
+    timerContainer.innerHTML = "0" + minutes + ":" + seconds;
+  }
+  if (minutes === 10) {
+    finalScore.innerHTML = score;
+    finalTime.innerHTML = minutes + ":0" + seconds;
+    timerContainer.innerHTML = minutes + ":0" + seconds;
+    gameOverText.innerHTML = "You have run out of time.";
+    gameOverContainer.classList.remove("gameOver_hidden");
+    clearInterval(gameMoving);
+    clearInterval(timerInterval);
+  }
+};
+const timerInterval = setInterval(timer, 1000);
+
+//Render lifes:
+
+const lifesContainer = document.querySelector(".lifes");
+
+const renderLifes = () => {
+  lifesContainer.innerHTML = "";
+  for (let i = 0; i < lifes; i++) {
+    const life = document.createElement("div");
+    life.classList.add("pacman");
+    lifesContainer.appendChild(life);
+  }
+};
 
 const completeBoard = () => {
   for (let i = 0; i < boardStyles.length; i++) {
@@ -50,6 +96,7 @@ const completeBoard = () => {
       newStyledElement.id = i;
     }
   }
+  renderLifes();
   startPoint();
   ghostPlacement();
 };
@@ -158,6 +205,7 @@ const pacmanMoving = (ev) => {
           squares[pacmanStart + 1].innerHTML !== ""
         ) {
           score += 3;
+          scoreContainer.innerHTML = score;
           pacman.classList.add("speedRun");
           setTimeout(removeClass, 10000);
         }
@@ -194,6 +242,7 @@ const pacmanMoving = (ev) => {
           squares[pacmanStart + 28].innerHTML !== ""
         ) {
           score += 3;
+          scoreContainer.innerHTML = score;
           pacman.classList.add("speedRun");
           setTimeout(removeClass, 10000);
         }
@@ -265,9 +314,9 @@ let classes = [
   "ghostOne",
   "ghostTwo",
   "ghostThree",
-  "ghostOne",
-  "ghostTwo",
-  "ghostThree",
+  "ghostFour",
+  "ghostFive",
+  "ghostSix",
 ];
 
 //Place ghosts in the board:
@@ -285,7 +334,7 @@ let preferredDirection = [1, -1, 28, -28, 1, -1];
 const ghostMovement = () => {
   let directions = [1, -1, 28, -28];
   for (let i = 0; i < ghosts.length; i++) {
-    let randomDirection = Math.round(Math.random() * 1);
+    let randomDirection = Math.round(Math.random() * 3);
     if (
       previousDirection[i] !== 28 &&
       !squares[startPoints[i] - 28].classList.contains("One") &&
@@ -301,21 +350,155 @@ const ghostMovement = () => {
       startPoints.indexOf(startPoints[i] + previousDirection[i]) === -1
     ) {
       startPoints[i] += previousDirection[i];
+    } else if (
+      startPoints.indexOf(startPoints[i] + directions[randomDirection]) !==
+        -1 &&
+      !squares[startPoints[i] - directions[randomDirection]].classList.contains(
+        "One"
+      )
+    ) {
+      startPoints[i] -= directions[randomDirection];
+      previousDirection[i] = -directions[randomDirection];
     } else {
-      if (previousDirection[i] === 1 || previousDirection[i] === -1) {
-        directions = [28, -28];
+      if (randomDirection % 2 === 0) {
+        if (previousDirection[i] === 1 || previousDirection[i] === -1) {
+          if (
+            !squares[startPoints[i] + 28].classList.contains("One") &&
+            startPoints.indexOf(startPoints[i] + 28) === -1
+          ) {
+            startPoints[i] += 28;
+            previousDirection[i] = 28;
+          } else if (
+            !squares[startPoints[i] - 28].classList.contains("One") &&
+            startPoints.indexOf(startPoints[i] - 28) === -1
+          ) {
+            startPoints[i] -= 28;
+            previousDirection[i] = -28;
+          } else {
+            directions = [1, -1];
+            randomDirection = Math.round(Math.random() * 1);
+            if (
+              !squares[
+                startPoints[i] + directions[randomDirection]
+              ].classList.contains("One") &&
+              startPoints.indexOf(
+                startPoints[i] + directions[randomDirection]
+              ) === -1
+            ) {
+              startPoints[i] += directions[randomDirection];
+              previousDirection[i] = directions[randomDirection];
+            }
+          }
+        } else {
+          if (
+            !squares[startPoints[i] + 1].classList.contains("One") &&
+            startPoints.indexOf(startPoints[i] + 1) === -1
+          ) {
+            startPoints[i] += 1;
+            previousDirection[i] = 1;
+          } else if (
+            !squares[startPoints[i] - 1].classList.contains("One") &&
+            startPoints.indexOf(startPoints[i] - 1) === -1
+          ) {
+            startPoints[i] -= 1;
+            previousDirection[i] = -1;
+          } else {
+            directions = [28, -28];
+            randomDirection = Math.round(Math.random() * 1);
+            if (
+              !squares[
+                startPoints[i] + directions[randomDirection]
+              ].classList.contains("One") &&
+              startPoints.indexOf(
+                startPoints[i] + directions[randomDirection]
+              ) === -1
+            ) {
+              startPoints[i] += directions[randomDirection];
+              previousDirection[i] = directions[randomDirection];
+            }
+          }
+        }
       } else {
-        directions = [1, -1];
+        if (previousDirection[i] === 1 || previousDirection[i] === -1) {
+          if (
+            !squares[startPoints[i] - 28].classList.contains("One") &&
+            startPoints.indexOf(startPoints[i] - 28) === -1
+          ) {
+            startPoints[i] -= 28;
+            previousDirection[i] = -28;
+          } else if (
+            !squares[startPoints[i] + 28].classList.contains("One") &&
+            startPoints.indexOf(startPoints[i] + 28) === -1
+          ) {
+            startPoints[i] += 28;
+            previousDirection[i] = 28;
+          } else {
+            directions = [1, -1];
+            randomDirection = Math.round(Math.random() * 1);
+            if (
+              !squares[
+                startPoints[i] + directions[randomDirection]
+              ].classList.contains("One") &&
+              startPoints.indexOf(
+                startPoints[i] + directions[randomDirection]
+              ) === -1
+            ) {
+              startPoints[i] += directions[randomDirection];
+              previousDirection[i] = directions[randomDirection];
+            }
+          }
+        } else {
+          if (
+            !squares[startPoints[i] - 1].classList.contains("One") &&
+            startPoints.indexOf(startPoints[i] - 1) === -1
+          ) {
+            startPoints[i] -= 1;
+            previousDirection[i] = -1;
+          } else if (
+            !squares[startPoints[i] + 1].classList.contains("One") &&
+            startPoints.indexOf(startPoints[i] + 1) === -1
+          ) {
+            startPoints[i] += 1;
+            previousDirection[i] = 1;
+          } else {
+            directions = [28, -28];
+            randomDirection = Math.round(Math.random() * 1);
+            if (
+              !squares[
+                startPoints[i] + directions[randomDirection]
+              ].classList.contains("One") &&
+              startPoints.indexOf(
+                startPoints[i] + directions[randomDirection]
+              ) === -1
+            ) {
+              startPoints[i] += directions[randomDirection];
+              previousDirection[i] = directions[randomDirection];
+            }
+          }
+        }
       }
-      if (
-        !squares[
-          startPoints[i] + directions[randomDirection]
-        ].classList.contains("One") &&
-        startPoints.indexOf(startPoints[i] + directions[randomDirection]) === -1
-      ) {
-        startPoints[i] += directions[randomDirection];
-        previousDirection[i] = directions[randomDirection];
+    }
+  }
+
+  if (startPoints.indexOf(pacmanStart) !== -1) {
+    if (pacman.classList.contains("speedRun")) {
+      score += 50;
+      scoreContainer.innerHTML = score;
+    } else {
+      pacmanStart = 490;
+      lifes--;
+      startPoint();
+      renderLifes();
+    }
+    if (lifes === 0) {
+      finalScore.innerHTML = score;
+      if (seconds < 10) {
+        finalTime.innerHTML = "0" + minutes + ":0" + seconds;
+      } else {
+        finalTime.innerHTML = "0" + minutes + ":" + seconds;
       }
+      gameOverContainer.classList.remove("gameOver_hidden");
+      clearInterval(gameMoving);
     }
   }
 
@@ -324,4 +507,4 @@ const ghostMovement = () => {
 
 let ms = 200 - level * 50;
 
-setInterval(ghostMovement, ms);
+const gameMoving = setInterval(ghostMovement, ms);

@@ -6,8 +6,10 @@
 body {
   background-color: #1f2527;
   display: flex;
+  height: 100vh;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .game {
@@ -83,7 +85,7 @@ body {
 
 .lifes {
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .pacman {
@@ -129,6 +131,30 @@ body {
   border-radius: 40%;
 }
 
+.ghostFour {
+  width: 1px;
+  height: 4px;
+  border: 7px solid #8fd6ff;
+  border-bottom-color: transparent;
+  border-radius: 40%;
+}
+
+.ghostFive {
+  width: 1px;
+  height: 4px;
+  border: 7px solid #f79400;
+  border-bottom-color: transparent;
+  border-radius: 40%;
+}
+
+.ghostSix {
+  width: 1px;
+  height: 4px;
+  border: 7px solid #8176e9;
+  border-bottom-color: transparent;
+  border-radius: 40%;
+}
+
 @keyframes speedRun {
   0% {
     width: 1px;
@@ -167,4 +193,62 @@ body {
 .speedRun {
   animation: speedRun 1s ease;
   animation-iteration-count: 30;
+}
+
+.gameOver {
+  width: 400px;
+  height: 200px;
+  background-color: rgb(255, 243, 75);
+  border: 3px rgb(108, 124, 167) groove;
+  position: absolute;
+  left: calc(50vw-200px);
+  top: calc(50vh-100px);
+  border-radius: 20%;
+  box-sizing: border-box;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameOver_title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: rgb(30, 255, 0);
+}
+
+.gameOver_text {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 10px 0px;
+  background-color: #00f7c2;
+  padding: 3px 10px;
+}
+
+.gameOver_button {
+  background-color: rgb(250, 54, 129);
+  border-radius: 15%;
+  border: none;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.gameOver_hidden {
+  display: none;
+}
+
+.finalScore_title {
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 10px;
+}
+
+.timer {
+  align-self: flex-end;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: #66909c;
 }

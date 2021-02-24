@@ -9,18 +9,22 @@
   </head>
   <body>
     <section class="game">
-      <div class="lifes">
-        <div class="pacman"></div>
-        <div class="pacman"></div>
-        <div class="pacman"></div>
-      </div>
+      <div class="lifes"></div>
+      <div class="timer"></div>
       <div class="board"></div>
       <div class="info">
         <p>Score: <span class="score"></span></p>
         <p>Level: <span class="level"></span></p>
       </div>
     </section>
-
+    <section class="gameOver gameOver_hidden">
+      <h2 class="gameOver_title">Game over</h2>
+      <p class="gameOver_text">You do not have any life left.</p>
+      <button class="gameOver_button">Play again!</button>
+      <p class="finalScore_title">
+        Score: <span class="finalScore"></span> Time: <span class="time"></span>
+      </p>
+    </section>
     <script src="./js/pacman.js"></script>
   </body>
 </html>
