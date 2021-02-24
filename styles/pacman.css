@@ -12,11 +12,29 @@ body {
   justify-content: center;
 }
 
+.start {
+  font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 10px;
+  border-radius: 20%;
+  position: absolute;
+  left: calc(50vw-width/2);
+  top: calc(50vh-height/2);
+  background-color: #f700ce;
+  border: 2px solid #f7f700;
+  z-index: 9;
+}
+
+.start:hover {
+  transform: scale(1.2);
+}
+
 .game {
   width: 420px;
   display: flex;
   flex-direction: column;
   margin: 20px;
+  position: relative;
 }
 
 .board {
@@ -86,6 +104,8 @@ body {
 .lifes {
   display: flex;
   margin-bottom: 0px;
+  position: absolute;
+  top: -30px;
 }
 
 .pacman {
@@ -210,6 +230,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 9;
 }
 
 .gameOver_title {
@@ -247,8 +268,63 @@ body {
 }
 
 .timer {
-  align-self: flex-end;
+  position: absolute;
+  top: -30px;
+  right: 0px;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: #66909c;
+  font-size: 25px;
+}
+
+.congratulations {
+  width: auto;
+  height: 200px;
+  background-color: rgb(255, 243, 75);
+  border: 3px rgb(108, 124, 167) groove;
+  position: absolute;
+  left: calc(50vw-200px);
+  top: calc(50vh-100px);
+  border-radius: 20%;
+  box-sizing: border-box;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
+}
+
+.congratulations_title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: rgb(30, 255, 0);
+}
+
+.congratulations_text {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 10px 0px;
+  background-color: #00f7c2;
+  padding: 3px 10px;
+}
+
+.congratulations_button {
+  background-color: rgb(250, 54, 129);
+  border-radius: 15%;
+  border: none;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.congratulations_hidden {
+  display: none;
+}
+
+.congratulationsFinalScore_title {
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 10px;
 }

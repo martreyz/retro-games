@@ -1,6 +1,11 @@
 "use strict";
 
+const startBtn = document.querySelector(".start");
+
 let boardStyles = [];
+
+let pointsToWin = 236;
+let bigPointsToWin = 4;
 fetch("../data/board.json")
   .then((response) => {
     return response.json();
@@ -12,6 +17,19 @@ fetch("../data/board.json")
     completeBoard();
   });
 const board = document.querySelector(".board");
+
+//Start:
+
+const startTheGame = () => {
+  startBtn.classList.add("congratulations_hidden");
+  startPoints = [403, 404, 405, 406, 407, 408];
+  renderLifes();
+  startPoint();
+  ghostPlacement();
+  const timerInterval = setInterval(timer, 1000);
+};
+
+startBtn.addEventListener("click", startTheGame);
 
 //1- Wall
 //2- point
@@ -33,6 +51,14 @@ const finalScore = document.querySelector(".finalScore");
 const timerContainer = document.querySelector(".timer");
 const finalTime = document.querySelector(".time");
 const gameOverText = document.querySelector(".gameOver_text");
+const gameOverBtn = document.querySelector(".gameOver_button");
+
+const congratulationsContainer = document.querySelector(".congratulations");
+const congratulationsFinalScore = document.querySelector(
+  ".congratulationsFinalScore"
+);
+const congratulationsFinalTime = document.querySelector(".congratulationsTime");
+const congratulationsBtn = document.querySelector(".congratulations_button");
 
 //Render and function of timer:
 let seconds = 50;
@@ -51,15 +77,14 @@ const timer = () => {
   }
   if (minutes === 10) {
     finalScore.innerHTML = score;
-    finalTime.innerHTML = minutes + ":0" + seconds;
-    timerContainer.innerHTML = minutes + ":0" + seconds;
+    finalTime.innerHTML = "10:00";
+    timerContainer.innerHTML = "10:00";
     gameOverText.innerHTML = "You have run out of time.";
     gameOverContainer.classList.remove("gameOver_hidden");
     clearInterval(gameMoving);
     clearInterval(timerInterval);
   }
 };
-const timerInterval = setInterval(timer, 1000);
 
 //Render lifes:
 
@@ -96,10 +121,16 @@ const completeBoard = () => {
       newStyledElement.id = i;
     }
   }
-  renderLifes();
-  startPoint();
-  ghostPlacement();
 };
+
+//Replay:
+
+const reload = () => {
+  location.reload();
+};
+
+gameOverBtn.addEventListener("click", reload);
+congratulationsBtn.addEventListener("click", reload);
 
 //Pacman movement:
 
@@ -130,9 +161,11 @@ const pacmanMoving = (ev) => {
           if (pacman.classList.contains("speedRun")) {
             score += 4;
             scoreContainer.innerHTML = score;
+            pointsToWin--;
           } else {
             score += 2;
             scoreContainer.innerHTML = score;
+            pointsToWin--;
           }
         } else if (
           squares[pacmanStart - 1].classList.contains("Three") &&
@@ -140,7 +173,8 @@ const pacmanMoving = (ev) => {
         ) {
           score += 3;
           pacman.classList.add("speedRun");
-          setTimeout(removeClass, 10000);
+          bigPointsToWin--;
+          setTimeout(removeClass, 5000);
         }
         if (pacmanStart === 393) {
           squares[419].innerHTML = "";
@@ -166,9 +200,11 @@ const pacmanMoving = (ev) => {
           if (pacman.classList.contains("speedRun")) {
             score += 4;
             scoreContainer.innerHTML = score;
+            pointsToWin--;
           } else {
             score += 2;
             scoreContainer.innerHTML = score;
+            pointsToWin--;
           }
         } else if (
           squares[pacmanStart - 28].classList.contains("Three") &&
@@ -176,7 +212,8 @@ const pacmanMoving = (ev) => {
         ) {
           score += 3;
           pacman.classList.add("speedRun");
-          setTimeout(removeClass, 10000);
+          setTimeout(removeClass, 5000);
+          bigPointsToWin--;
         }
         squares[pacmanStart - 28].innerHTML = "";
         pacmanStart -= 28;
@@ -196,9 +233,11 @@ const pacmanMoving = (ev) => {
           if (pacman.classList.contains("speedRun")) {
             score += 4;
             scoreContainer.innerHTML = score;
+            pointsToWin--;
           } else {
             score += 2;
             scoreContainer.innerHTML = score;
+            pointsToWin--;
           }
         } else if (
           squares[pacmanStart + 1].classList.contains("Three") &&
@@ -206,8 +245,9 @@ const pacmanMoving = (ev) => {
         ) {
           score += 3;
           scoreContainer.innerHTML = score;
+          bigPointsToWin--;
           pacman.classList.add("speedRun");
-          setTimeout(removeClass, 10000);
+          setTimeout(removeClass, 5000);
         }
         if (pacmanStart === 418) {
           squares[393].innerHTML = "";
@@ -233,9 +273,11 @@ const pacmanMoving = (ev) => {
           if (pacman.classList.contains("speedRun")) {
             score += 4;
             scoreContainer.innerHTML = score;
+            pointsToWin--;
           } else {
             score += 2;
             scoreContainer.innerHTML = score;
+            pointsToWin--;
           }
         } else if (
           squares[pacmanStart + 28].classList.contains("Three") &&
@@ -243,14 +285,27 @@ const pacmanMoving = (ev) => {
         ) {
           score += 3;
           scoreContainer.innerHTML = score;
+          bigPointsToWin--;
           pacman.classList.add("speedRun");
-          setTimeout(removeClass, 10000);
+          setTimeout(removeClass, 5000);
         }
         squares[pacmanStart + 28].innerHTML = "";
         pacmanStart += 28;
         pacman.style.transform = "rotate(90deg)";
       }
       break;
+  }
+
+  if (pointsToWin === 0 && bigPointsToWin === 0) {
+    congratulationsFinalScore.innerHTML = score;
+    if (seconds < 10) {
+      congratulationsFinalTime.innerHTML = "0" + minutes + ":0" + seconds;
+    } else {
+      congratulationsFinalTime.innerHTML = "0" + minutes + ":" + seconds;
+    }
+    congratulationsContainer.classList.remove("congratulations_hidden");
+    clearInterval(gameMoving);
+    clearInterval(timerInterval);
   }
   squares[pacmanStart].appendChild(pacman);
   checkLevel();
@@ -292,8 +347,26 @@ const checkLevel = () => {
   } else if (score >= 650 && score < 700) {
     level = 9;
     levelContainer.innerHTML = level;
-  } else if (score >= 700) {
+  } else if (score >= 700 && score < 750) {
     level = 10;
+    levelContainer.innerHTML = level;
+  } else if (score >= 750 && score < 800) {
+    level = 11;
+    levelContainer.innerHTML = level;
+  } else if (score >= 800 && score < 850) {
+    level = 12;
+    levelContainer.innerHTML = level;
+  } else if (score >= 850 && score < 900) {
+    level = 13;
+    levelContainer.innerHTML = level;
+  } else if (score >= 900 && score < 950) {
+    level = 14;
+    levelContainer.innerHTML = level;
+  } else if (score >= 950 && score < 1000) {
+    level = 15;
+    levelContainer.innerHTML = level;
+  } else if (score >= 1000) {
+    level = 16;
     levelContainer.innerHTML = level;
   }
 };
@@ -480,7 +553,13 @@ const ghostMovement = () => {
     }
   }
 
-  if (startPoints.indexOf(pacmanStart) !== -1) {
+  if (
+    startPoints.indexOf(pacmanStart) !== -1 ||
+    startPoints.indexOf(pacmanStart + 1) !== -1 ||
+    startPoints.indexOf(pacmanStart - 1) !== -1 ||
+    startPoints.indexOf(pacmanStart + 28) !== -1 ||
+    startPoints.indexOf(pacmanStart - 28) !== -1
+  ) {
     if (pacman.classList.contains("speedRun")) {
       score += 50;
       scoreContainer.innerHTML = score;
@@ -499,12 +578,13 @@ const ghostMovement = () => {
       }
       gameOverContainer.classList.remove("gameOver_hidden");
       clearInterval(gameMoving);
+      clearInterval(timerInterval);
     }
   }
 
   ghostPlacement();
 };
 
-let ms = 200 - level * 50;
+let ms = 200 - level * 80;
 
 const gameMoving = setInterval(ghostMovement, ms);
