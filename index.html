@@ -4,9 +4,87 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./styles/main.css" rel="stylesheet" />
     <title>Retro Games</title>
   </head>
   <body>
-    <a href="./pacman.html" title="Go to pacman">Pacman</a>
+    <header class="header">
+      <h1 class="header_title">Welcome back to the 90's!</h1>
+      <p class="header_text">Pick your coin and choose a game to play!</p>
+    </header>
+    <main class="main">
+      <a href="./pacman.html" class="main_pacmanGame" title="Go to pacman">
+        <h2 class="main_pacmanGameTitle">Pacman</h2>
+        <img
+          class="main_pacmanGameImg"
+          src="./images/bodybg.PNG"
+          title="Pacman image"
+        />
+      </a>
+    </main>
+    <footer
+      class="container-fluid footer px-5 py-1 bg-secondary text-white d-flex justify-content-between align-items-center"
+    >
+      <nav class="footer__menu">
+        <ul class="footer__menuList">
+          <li class="footer__menuList-github">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              class="footer__menuList-access"
+              href="https://github.com/martreyz"
+              title="Access GitHub"
+            >
+            </a>
+          </li>
+          <li class="footer__menuList-linkedin">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              class="footer__menuList-access"
+              href="https://www.linkedin.com/in/martareyrodriguez/"
+              title="Access Linkedin"
+            >
+            </a>
+          </li>
+          <li class="footer__menuList-mail">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              class="footer__menuList-access"
+              href="mailto: martreyz@gmail.com"
+              title="Send email"
+            >
+            </a>
+          </li>
+          <li class="footer__menuList-twitter">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              class="footer__menuList-access"
+              href="https://twitter.com/im_martreyz"
+              title="Access Twitter"
+            >
+            </a>
+          </li>
+          <li class="footer__menuList-codepen">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              class="footer__menuList-access"
+              href="https://codepen.io/martreyz"
+              title="Access Codepen"
+            >
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <small class="small">Made with 😺 by martreyz </small>
+    </footer>
   </body>
 </html>
